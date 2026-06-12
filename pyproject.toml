@@ -1,0 +1,87 @@
+[build-system]
+requires = ["setuptools>=68.0", "wheel"]
+build-backend = "setuptools.backends._legacy:_Backend"
+
+[project]
+name = "cellfm"
+version = "0.2.0"
+description = "A clean PyTorch reimplementation of CellFM: a large-scale foundation model pre-trained on transcriptomics of 100 million human cells"
+readme = "README.md"
+license = {text = "CC-BY-NC-ND-4.0"}
+requires-python = ">=3.9"
+authors = [
+    {name = "Pratik Shah"},
+]
+keywords = [
+    "single-cell",
+    "foundation-model",
+    "gene-expression",
+    "retnet",
+    "deep-learning",
+    "transcriptomics",
+    "bioinformatics",
+]
+classifiers = [
+    "Development Status :: 3 - Alpha",
+    "Intended Audience :: Science/Research",
+    "Topic :: Scientific/Engineering :: Bio-Informatics",
+    "Topic :: Scientific/Engineering :: Artificial Intelligence",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.9",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+]
+
+dependencies = [
+    "torch>=2.0.0",
+    "numpy>=1.24.0",
+    "scipy>=1.10.0",
+    "scikit-learn>=1.2.0",
+    "tqdm>=4.65.0",
+]
+
+[project.optional-dependencies]
+bio = [
+    "scanpy>=1.9.0",
+    "anndata>=0.9.0",
+    "pandas>=2.0.0",
+    "h5py>=3.8.0",
+    "loompy>=3.0.0",
+]
+viz = [
+    "matplotlib>=3.7.0",
+    "seaborn>=0.12.0",
+    "tensorboard>=2.13.0",
+]
+dev = [
+    "pytest>=7.3.0",
+    "pytest-cov>=4.0.0",
+    "ruff>=0.4.0",
+]
+all = [
+    "cellfm[bio,viz,dev]",
+]
+
+[project.scripts]
+cellfm = "cellfm.cli:main"
+
+[project.urls]
+Homepage = "https://github.com/Shahip2016/Single-cell-foundation-model"
+Repository = "https://github.com/Shahip2016/Single-cell-foundation-model"
+Issues = "https://github.com/Shahip2016/Single-cell-foundation-model/issues"
+
+[tool.setuptools.packages.find]
+include = ["cellfm*"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+addopts = "-v --tb=short"
+
+[tool.ruff]
+target-version = "py39"
+line-length = 100
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "W"]
+ignore = ["E501"]
