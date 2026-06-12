@@ -111,8 +111,43 @@ print(f"Output shape: {output.shape}")  # (4, 2048, 512)
 ## 📚 Learning Resources
 
 - **[Layman's Guide](docs/LAYMAN_GUIDE.md)** — If you're new to single-cell biology or foundation models
-- **Architecture Deep-Dive** (coming soon) — Technical details of every component
-- **Tutorial Notebooks** (coming soon) — Step-by-step walkthroughs
+- **[Architecture Deep-Dive](docs/ARCHITECTURE.md)** — Technical details of every component
+- **[API Reference](docs/API_REFERENCE.md)** — Complete API documentation
+- **[Contributing Guide](docs/CONTRIBUTING.md)** — How to contribute to the project
+
+### Available Modules
+
+| Module | File | Purpose |
+|--------|------|---------|
+| Config | `cellfm/config.py` | Model hyperparameters (80M, 800M) |
+| Embedding | `cellfm/embedding.py` | Gene expression → vector embeddings |
+| Retention | `cellfm/retention.py` | Multi-scale retention (RetNet) |
+| SGLU | `cellfm/sglu.py` | SwiGLU feed-forward layer |
+| Model | `cellfm/model.py` | Full CellFM assembly |
+| LoRA | `cellfm/lora.py` | Low-rank adaptation for fine-tuning |
+| Data | `cellfm/data.py` | Data loading & preprocessing pipeline |
+| Trainer | `cellfm/trainer.py` | Training loop, LR scheduling, checkpointing |
+| Inference | `cellfm/inference.py` | Pretrained loading, prediction, embedding extraction |
+| **Metrics** | `cellfm/metrics.py` | Accuracy, F1, confusion matrix, evaluator |
+| **Visualization** | `cellfm/visualization.py` | UMAP/t-SNE plots, training curves, heatmaps |
+| **CLI** | `cellfm/cli.py` | Command-line interface for train/predict/embed |
+| **Convert** | `cellfm/convert.py` | MindSpore → PyTorch weight conversion |
+
+### Command-Line Usage
+
+```bash
+# Show model info
+python -m cellfm info --config 80M
+
+# Train a model
+python -m cellfm train --data cells.h5ad --label-col cell_type --epochs 10
+
+# Predict cell types
+python -m cellfm predict --checkpoint best.pt --data test.h5ad
+
+# Extract embeddings
+python -m cellfm embed --checkpoint best.pt --data cells.h5ad --output emb.npy
+```
 
 ---
 
