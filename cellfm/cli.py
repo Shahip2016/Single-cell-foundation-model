@@ -169,6 +169,29 @@ Examples:
         help="Compute device (default: auto)",
     )
 
+    # === export subcommand ===
+    export_parser = subparsers.add_parser(
+        "export",
+        help="Export the model to ONNX format",
+    )
+    export_parser.add_argument(
+        "--checkpoint", type=str, required=True,
+        help="Path to trained checkpoint",
+    )
+    export_parser.add_argument(
+        "--output", type=str, default="model.onnx",
+        help="Output file for ONNX model (.onnx, default: model.onnx)",
+    )
+    export_parser.add_argument(
+        "--config", type=str, default="80M",
+        choices=["80M", "800M"],
+        help="Model configuration (default: 80M)",
+    )
+    export_parser.add_argument(
+        "--device", type=str, default="cpu",
+        help="Compute device (default: cpu)",
+    )
+
     return parser
 
 
@@ -442,9 +465,35 @@ def cmd_embed(args):
     print(f"   Shape: {embeddings.shape}")
     print(f"   Time: {elapsed:.1f}s")
 
-    # Save
     np.save(args.output, embeddings)
     print(f"\n✅ Embeddings saved to {args.output}")
+
+
+def cmd_export(args):
+    """Export model to ONNX."""
+    device = get_device(args.device)
+    print(f"🧬 CellFM ONNX Export")
+    print(f"   Checkpoint: {args.checkpoint}")
+    print(f"   Output: {args.output}")
+    print(f"   Config: {args.config}")
+    print(f"   Device: {device}")
+    print()
+
+    if not os.path.exists(args.checkpoint):
+        print(f"❌ Checkpoint not found: {args.checkpoint}")
+        sys.exit(1)
+
+    from .config import Config80M, Config800M
+    config = Config800M() if args.config == "800M" else Config80M()
+
+    from .inference import load_pretrained
+    model = load_pretrained(args.checkpoint, n_genes=20000, config=config, device=device)
+
+    from .export import export_to_onnx
+    export_to_onnx(model, args.output, n_genes=20000, device=device)
+
+    print(f"\n✅ Model exported to {args.output}")
+
 
 
 def main(argv=None):
@@ -461,6 +510,7 @@ def main(argv=None):
         "train": cmd_train,
         "predict": cmd_predict,
         "embed": cmd_embed,
+        "export": cmd_export,
     }
 
     cmd_func = commands.get(args.command)
