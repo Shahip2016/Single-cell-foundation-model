@@ -31,4 +31,5 @@ from .config import Config80M, Config800M
 from .model import CellFM, ERetNetBlock
 from .lora import LoRALinear, apply_lora_to_model, get_lora_params
 from .metrics import accuracy, precision_recall_f1, confusion_matrix, CellFMEvaluator
+from .export import export_to_onnx
 
