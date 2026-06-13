@@ -147,6 +147,9 @@ python -m cellfm predict --checkpoint best.pt --data test.h5ad
 
 # Extract embeddings
 python -m cellfm embed --checkpoint best.pt --data cells.h5ad --output emb.npy
+
+# Export to ONNX
+python -m cellfm export --checkpoint best.pt --output model.onnx
 ```
 
 ---
